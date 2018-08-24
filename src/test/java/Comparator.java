@@ -20,11 +20,11 @@ public class Comparator {
             Scanner sc = new Scanner(new File(".\\src\\test\\resources\\File1"));
             Scanner sc2 = new Scanner(new File(".\\src\\test\\resources\\File2"));
 
-            while(sc.hasNext() && sc2.hasNext()){
+            while (sc.hasNext() && sc2.hasNext()) {
                 String line = sc.next();
                 String line2 = sc2.next();
                 //System.out.println(line);
-                RestAssured.proxy("10.65.128.43",8080);
+                RestAssured.proxy("10.65.128.43", 8080);
                 String response = RestAssured.get(line).asString();
                 String response2 = RestAssured.get(line2).asString();
 
@@ -33,18 +33,27 @@ public class Comparator {
 
                 ObjectMapper mapper = new ObjectMapper();
                 //String jsonInput = "{\"key\": \"value\"}";
-                TypeReference<HashMap<Object, Object>> typeRef
-                        = new TypeReference<HashMap<Object, Object>>() {};
-                Map<Object, Object> map = mapper.readValue(response, typeRef);
+                TypeReference<HashMap<String, User>> typeRef
+                        = new TypeReference<HashMap<String, User>>() {
+                };
+                Map<String, User> map = mapper.readValue(response, typeRef);
 
-                System.out.println(map.toString());
+                TypeReference<HashMap<String, User>> typeRef2
+                        = new TypeReference<HashMap<String, User>>() {
+                };
+                Map<String, User> map2 = mapper.readValue(response2, typeRef2);
 
+                System.out.println(map2.toString());
 
-                if(response.equals(response2))
-                    System.out.println(line +" is equal to " + line2);
-                else
+                if (map.get("data").equals(map2.get("data"))) {
+                    System.out.println(line + " is equal to " + line2);
+                } else
                     System.out.println(line + " is not equal to " + line2);
 
+                if (response.equals(response2))
+                    System.out.println(line + " is equal to " + line2);
+                else
+                    System.out.println(line + " is not equal to " + line2);
             }
         } catch (Exception e) {
             e.printStackTrace();
