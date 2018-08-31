@@ -23,7 +23,7 @@ public class APICompare {
                 String line1 = sc1.next();
                 String line2 = sc2.next();
 
-                RestAssured.proxy("10.65.128.43", 8080);
+                //RestAssured.proxy("10.65.128.43", 8080);
 
                 String response1 = RestAssured.get(line1).asString();
                 String response2 = RestAssured.get(line2).asString();
@@ -34,6 +34,7 @@ public class APICompare {
                 String contentType1 = resp1.header("Content-Type");
                 String contentType2 = resp2.header("Content-Type");
 
+                //checking if API response is in JSON format
                 if (contentType1.contains("json") && contentType2.contains("json")) {
                     ObjectMapper om = new ObjectMapper();
                     try {
@@ -46,6 +47,7 @@ public class APICompare {
                     } catch (JsonParseException | JsonMappingException e) {
                         e.printStackTrace();
                     }
+                    //checking if API response is in JSON format
                 } else if (contentType1.contains("xml") && contentType2.contains("xml")) {
                     try {
                         if(compareXml(response1, response2)){
@@ -55,6 +57,7 @@ public class APICompare {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    //checking if API response is in String or AnyOther format. Comparing as String.
                 } else {
                     if(response1.equals(response2)){
                         System.out.println(line1 +" equals to "+line2);;
@@ -68,6 +71,7 @@ public class APICompare {
         }
     }
 
+    //This function compares XML document as String
     public static boolean compareXml(String xml1, String xml2) {
         XMLUnit.setIgnoreWhitespace(true);
         boolean isMatch = false;
